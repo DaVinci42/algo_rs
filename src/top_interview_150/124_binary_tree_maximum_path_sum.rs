@@ -2,16 +2,22 @@ use std::cell::RefCell;
 use std::collections::HashMap;
 use std::rc::Rc;
 
+trait Hash {
+    fn hash(&self) -> usize;
+}
+
+impl Hash for Rc<RefCell<TreeNode>> {
+    fn hash(&self) -> usize {
+        Rc::as_ptr(self) as usize
+    }
+}
+
 type LeetNode = Option<Rc<RefCell<TreeNode>>>;
 
 impl Solution {
-    fn nodekey(node: &Rc<RefCell<TreeNode>>) -> usize {
-        Rc::as_ptr(node) as usize
-    }
-
     fn max_from_node(node: &LeetNode, cache: &mut HashMap<usize, i32>) -> i32 {
         if let Some(rc) = node {
-            let key = Self::nodekey(rc);
+            let key = rc.hash();
             if let Some(&res) = cache.get(&key) {
                 return res;
             }
