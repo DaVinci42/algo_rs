@@ -13,11 +13,10 @@ impl Solution {
             cur = &b.next;
         }
 
-        let (mut i, k) = (0, k as usize);
-        while i + k - 1 < v.len() {
-            Self::reverse(&mut v, i, i + k - 1);
-            i += k;
-        }
+        let k = k as usize;
+        (k - 1..v.len())
+            .step_by(k)
+            .for_each(|r| Self::reverse(&mut v, r - k + 1, r));
 
         let mut dummy = ListNode::new(0);
         let mut tail = &mut dummy;
